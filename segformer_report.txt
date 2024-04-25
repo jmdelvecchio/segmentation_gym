@@ -1,0 +1,15 @@
+Model: "tf_segformer_for_semantic_segmentation"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ segformer (TFSegformerMainL  multiple                 3319392   
+ ayer)                                                           
+                                                                 
+ decode_head (TFSegformerDec  multiple                 396292    
+ odeHead)                                                        
+                                                                 
+=================================================================
+Total params: 3,715,684
+Trainable params: 3,715,172
+Non-trainable params: 512
+_________________________________________________________________

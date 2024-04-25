@@ -35,26 +35,29 @@ from skimage.transform import resize
 ## VARIABLES
 ###############################################################
 
-root = Tk()
-root.filename =  filedialog.askdirectory(initialdir = "./",title = "Select directory of TRAIN data files")
-data_path = root.filename
-print(data_path)
-root.withdraw()
+# root = Tk()
+# root.filename =  filedialog.askdirectory(initialdir = "./",title = "Select directory of TRAIN data files")
+# data_path = root.filename
+# print(data_path)
+# root.withdraw()
 
-root = Tk()
-root.filename =  filedialog.askdirectory(initialdir = data_path,title = "Select directory of VALIDATION data files")
-val_data_path = root.filename
-print(val_data_path)
-root.withdraw()
+# root = Tk()
+# root.filename =  filedialog.askdirectory(initialdir = data_path,title = "Select directory of VALIDATION data files")
+# val_data_path = root.filename
+# print(val_data_path)
+# root.withdraw()
 
-root = Tk()
-root.filename =  filedialog.askopenfilename(initialdir = data_path,title = "Select config file",filetypes = (("config files","*.json"),("all files","*.*")))
-configfile = root.filename
-print(configfile)
-root.withdraw()
+# root = Tk()
+# root.filename =  filedialog.askopenfilename(initialdir = data_path,title = "Select config file",filetypes = (("config files","*.json"),("all files","*.*")))
+# configfile = root.filename
+# print(configfile)
+# root.withdraw()
+
+# data_path =     "/sciclone/home/jdelvecchio01/segmentation_gym/my_segmentation_gym_datasets_v5/capehatteras_data/npz4gym/train_data/train_npzs"
+# val_data_path = "/sciclone/home/jdelvecchio01/segmentation_gym/my_segmentation_gym_datasets_v5/capehatteras_data/npz4gym/val_data/val_npzs"
+configfile =    "/sciclone/home/jdelvecchio01/segmentation_gym/my_segmentation_gym_datasets_v5/config/hatteras_l8_segformer.json"
 
 configfile = os.path.normpath(configfile)
-data_path = os.path.normpath(data_path)
 
 weights = configfile.replace('.json','.h5').replace('config', 'weights')
 
@@ -69,6 +72,8 @@ with open(configfile) as f:
 
 for k in config.keys():
     exec(k+'=config["'+k+'"]')
+
+data_path = os.path.normpath(data_path)
 
 if NCLASSES>1:
     pass
@@ -582,9 +587,13 @@ def get_model(for_model_save=False):
 #######################################
 
 train_filenames = tf.io.gfile.glob(data_path+os.sep+ROOT_STRING+'*.npz')
+print(f'Globbing for {data_path+os.sep+ROOT_STRING}')
+print(f"Train filename number: {len(train_filenames)}")
 
 val_filenames = tf.io.gfile.glob(val_data_path+os.sep+ROOT_STRING+'*.npz')
 
+print(f'Globbing for {val_data_path+os.sep+ROOT_STRING}')
+print(f"Val filename number: {len(val_filenames)}")
 #----------------------------------------------------------
 
 shuffle(train_filenames) ##shuffle here
@@ -592,9 +601,11 @@ shuffle(val_filenames) ##shuffle here
 
 list_ds = tf.data.Dataset.list_files(train_filenames, shuffle=False) ##dont shuffle here
 
+# print(f"list_ds = {list_ds}")
+
 val_list_ds = tf.data.Dataset.list_files(val_filenames, shuffle=False) ##dont shuffle here
 
-
+# print(f"val_list_ds = {val_list_ds}")
 validation_steps = len(val_filenames) // BATCH_SIZE
 steps_per_epoch =  len(train_filenames) // BATCH_SIZE
 
